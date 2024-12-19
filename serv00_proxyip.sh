@@ -486,6 +486,7 @@ get_argodomain() {
 }
 
 get_links(){
+
 argodomain=$(get_argodomain)
 echo -e "\e[1;32mArgo域名:\e[1;35m${argodomain}\e[0m\n"
 if [ -z ${argodomain} ]; then
@@ -534,11 +535,14 @@ CF节点落地到非CF网站的地区为：$IP所在地区
 -------------------------------------------------------------------------------------------------
 
 
-二、Vmess-ws分享链接三形态如下 (如Argo域名生成失败，2 与 3 的Argo节点将不可用)：
+二、Vmess-ws分享链接三形态如下：
 
 1、Vmess-ws主节点分享链接如下：
 (该节点默认不支持CDN，如果设置为CDN回源(需域名)：客户端地址可自行修改优选IP/域名，7个80系端口随便换，被墙依旧能用！)
 $vmws_link
+
+Argo域名：${argodomain}
+如果上面Argo临时域名未生成，以下 2 与 3 的Argo节点将不可用 (固定域名需到CF后台查看是否处于绿色健康状态)
 
 2、Vmess-ws-tls_Argo分享链接如下： 
 (该节点为CDN优选IP节点，客户端地址可自行修改优选IP/域名，6个443系端口随便换，被墙依旧能用！)
@@ -1116,12 +1120,13 @@ done
 fi
 done
 snb=$(hostname | awk -F '.' '{print $1}')
-green "当前Serv00服务器名称：$snb"
+green "Serv00服务器名称：$snb"
 green "当前可选择的IP如下："
 cat $WORKDIR/ip.txt
 echo
 if [[ -e $WORKDIR/list.txt ]]; then
-green "已安装sing-box" 
+green "已安装sing-box"
+ps aux | grep '[c]onfig' > /dev/null && green "当前进程运行正常" || red "当前进程丢失，请卸载后重装脚本"
 else
 red "未安装sing-box，请选择 1 进行安装" 
 fi
